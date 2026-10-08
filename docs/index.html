@@ -5,104 +5,221 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Orbit Horizon</title>
 <meta name="description" content="Orbit Horizon: explore, survive, build and discover across an endless pixel galaxy. Download the launcher for Windows or Mac.">
+<meta property="og:title" content="Orbit Horizon">
+<meta property="og:description" content="A pixel survival game in space. Explore, survive, build and discover across an endless galaxy.">
+<meta property="og:image" content="logo-full.png">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Silkscreen&family=VT323&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0c0d1c; --panel: #121426; --panel-hi: #343858; --edge: #0a0a14;
-    --text: #dcdeec; --dim: #8286a0; --gold: #f6dc8c; --teal: #60dcec; --red: #ec6e64;
+    --bg: #070815; --bg2: #0d0f22; --panel: rgba(20, 22, 44, .72); --line: rgba(120, 130, 200, .22);
+    --text: #e4e6f4; --dim: #9094b4; --gold: #ffe9a8; --orange: #ee8a32; --ice: #eef3ff; --blue: #6f8fd8;
+    --teal: #66e0f0; --navy: #10122a; --glow: rgba(238, 138, 50, .45);
   }
   * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   html, body { margin: 0; background: var(--bg); color: var(--text); }
-  body { font-family: "VT323", ui-monospace, monospace; font-size: 22px; line-height: 1.25; }
-  img.px { image-rendering: pixelated; image-rendering: crisp-edges; }
+  body { font-family: "Pixelify Sans", ui-monospace, monospace; font-size: 18px; line-height: 1.5; overflow-x: hidden; }
   a { color: var(--teal); }
-  h1, h2, h3, .btn, .tag { font-family: "Silkscreen", "VT323", monospace; font-weight: normal; letter-spacing: 1px; }
+  .px { image-rendering: pixelated; image-rendering: crisp-edges; }
 
-  .hero { position: relative; min-height: min(56.25vw, 720px); overflow: hidden; border-bottom: 2px solid var(--panel-hi); }
-  .hero > .scene { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: right bottom; }
-  .hero-inner { position: relative; max-width: 1100px; margin: 0 auto; padding: 28px 20px 40px; }
-  .logo { width: min(520px, 90%); display: block; }
-  .tag { color: var(--dim); font-size: 15px; margin: 4px 0 26px 6px; }
+  /* koppen in de stijl van het logo: goud → oranje (of ijs → blauw), donkere rand, schaduw */
+  .title, h2, h3 { font-family: "Pixelify Sans", monospace; font-weight: 700; letter-spacing: 1px; margin: 0; }
+  .grad, h2 {
+    background: linear-gradient(180deg, #fff6d0 0%, var(--gold) 30%, #f6b860 62%, var(--orange) 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    filter: drop-shadow(2px 0 0 var(--navy)) drop-shadow(-2px 0 0 var(--navy)) drop-shadow(0 2px 0 var(--navy)) drop-shadow(0 -2px 0 var(--navy)) drop-shadow(3px 4px 0 rgba(0,0,0,.55));
+  }
+  .grad.ice { background-image: linear-gradient(180deg, #ffffff 0%, var(--ice) 35%, #b8c8f0 70%, var(--blue) 100%); }
+  h2 { font-size: clamp(30px, 4.4vw, 46px); text-transform: uppercase; }
+  .kicker { color: var(--teal); font-size: 15px; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 6px; }
 
-  .download { background: rgba(18, 20, 38, .92); border: 2px solid var(--panel-hi); padding: 18px; max-width: 470px; }
-  .btn { display: flex; align-items: center; gap: 14px; text-decoration: none; color: var(--gold); background: var(--panel);
-         border: 3px solid var(--gold); padding: 14px 18px; font-size: 24px; position: relative; }
-  .btn:hover { background: #1e2240; }
-  .btn .tri { width: 0; height: 0; border-left: 18px solid var(--gold); border-top: 12px solid transparent; border-bottom: 12px solid transparent; }
-  .btn small { display: block; font-family: "VT323", monospace; font-size: 18px; color: var(--dim); letter-spacing: 0; }
-  .others { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; }
-  .others a { font-size: 19px; text-decoration: none; color: var(--text); border: 2px solid var(--panel-hi); padding: 4px 10px; background: var(--panel); }
-  .others a:hover { border-color: var(--text); }
-  .note { color: var(--dim); font-size: 19px; margin: 10px 0 0; }
+  /* de balk bovenaan */
+  nav { position: fixed; inset: 0 0 auto 0; z-index: 20; display: flex; align-items: center; gap: 22px; padding: 10px clamp(16px, 4vw, 40px);
+        transition: background .3s, border-color .3s; border-bottom: 1px solid transparent; }
+  nav.solid { background: rgba(7, 8, 21, .82); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-color: var(--line); }
+  nav .mini { height: 34px; opacity: 0; transform: translateY(-6px); transition: .3s; }
+  nav.solid .mini { opacity: 1; transform: none; }
+  nav .links { margin-left: auto; display: flex; gap: 22px; align-items: center; }
+  nav .links a { color: var(--text); text-decoration: none; font-size: 16px; opacity: .8; }
+  nav .links a:hover { opacity: 1; color: var(--gold); }
+  nav .links a.pill { opacity: 1; color: #1a0f04; background: linear-gradient(180deg, var(--gold), var(--orange)); padding: 6px 14px; font-weight: 700;
+        box-shadow: 0 0 0 2px var(--navy), 0 0 18px var(--glow); }
 
-  main { max-width: 1100px; margin: 0 auto; padding: 30px 20px 50px; display: grid; grid-template-columns: 1fr 1fr; gap: 26px; }
-  section { background: var(--panel); border: 2px solid var(--panel-hi); padding: 16px 18px; }
-  h2 { color: var(--gold); font-size: 20px; margin: 0 0 10px; border-bottom: 2px solid var(--panel-hi); padding-bottom: 8px; }
-  ol { padding-left: 24px; margin: 0; } li { margin: 4px 0; }
-  .os { color: var(--gold); }
-  .news { display: flex; flex-direction: column; gap: 10px; }
-  .item { display: grid; grid-template-columns: 112px 1fr; gap: 12px; background: var(--edge); border: 2px solid var(--panel-hi); padding: 6px; }
-  .thumb { width: 112px; height: 61px; background: url("thumbs.png") no-repeat; background-size: 448px 61px; image-rendering: pixelated; border: 2px solid var(--panel-hi); }
-  .item .date { color: var(--dim); font-size: 17px; }
-  .item h3 { color: var(--gold); font-size: 15px; margin: 2px 0 4px; }
-  .item p { margin: 0; font-size: 19px; }
-  .wide { grid-column: 1 / -1; }
-  footer { text-align: center; color: var(--dim); font-size: 18px; padding: 0 20px 34px; }
-  @media (max-width: 760px) {
-    main { grid-template-columns: 1fr; }
-    .hero-inner { padding-top: 18px; }
-    .btn { font-size: 19px; }
+  /* de hero */
+  .hero { position: relative; min-height: 100vh; min-height: 100svh; display: grid; place-items: center; overflow: hidden; isolation: isolate; }
+  .hero .scene { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 70% 100%; z-index: -3; transform: scale(1.06); }
+  .hero canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -2; }
+  .hero::after { content: ""; position: absolute; inset: 0; z-index: -1;
+        background: radial-gradient(ellipse 70% 55% at 50% 42%, rgba(7,8,21,.15), rgba(7,8,21,.75) 75%), linear-gradient(180deg, rgba(7,8,21,.5), transparent 25%, transparent 65%, var(--bg)); }
+  .hero-inner { text-align: center; padding: 90px 18px 70px; width: 100%; max-width: 1000px; }
+  .logo { width: min(820px, 96%); filter: drop-shadow(0 0 30px rgba(110, 140, 255, .35)) drop-shadow(0 10px 30px rgba(0,0,0,.6)); animation: float 6s ease-in-out infinite; }
+  @keyframes float { 50% { transform: translateY(-10px); } }
+  .tag { font-size: clamp(14px, 2vw, 20px); letter-spacing: clamp(3px, 1vw, 8px); color: var(--ice); margin: 6px 0 34px; text-shadow: 0 2px 0 var(--navy), 0 0 14px rgba(110,140,255,.6); }
+  .tag b { color: var(--orange); font-weight: 400; }
+
+  .cta { display: inline-flex; align-items: center; gap: 18px; text-decoration: none; padding: 18px 34px 16px; position: relative;
+         color: #1a0f04; background: linear-gradient(180deg, #fff3c4, var(--gold) 35%, var(--orange)); font-weight: 700;
+         box-shadow: 0 0 0 3px var(--navy), 0 0 0 5px rgba(255, 233, 168, .55), 0 0 40px var(--glow), 0 12px 0 -2px rgba(0,0,0,.35);
+         transition: transform .15s, box-shadow .2s; }
+  .cta:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 0 0 3px var(--navy), 0 0 0 5px rgba(255, 233, 168, .9), 0 0 70px rgba(238,138,50,.75), 0 14px 0 -2px rgba(0,0,0,.35); }
+  .cta::before { content: ""; position: absolute; inset: 0; background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,.6) 50%, transparent 65%);
+         background-size: 250% 100%; animation: shine 3.8s ease-in-out infinite; pointer-events: none; }
+  @keyframes shine { 0%, 55% { background-position: 130% 0; } 100% { background-position: -30% 0; } }
+  .cta .tri { width: 0; height: 0; border-left: 20px solid #1a0f04; border-top: 13px solid transparent; border-bottom: 13px solid transparent; }
+  .cta .big { display: block; font-size: clamp(22px, 3vw, 30px); line-height: 1.1; text-align: left; }
+  .cta small { display: block; font-size: 14px; font-weight: 500; opacity: .75; text-align: left; }
+  .others { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+  .others a { font-size: 15px; text-decoration: none; color: var(--text); border: 1px solid var(--line); padding: 6px 14px; background: rgba(13,15,34,.65); backdrop-filter: blur(4px); transition: .2s; }
+  .others a:hover { border-color: var(--gold); color: var(--gold); }
+  .note { color: var(--dim); font-size: 15px; margin: 12px auto 0; max-width: 560px; }
+  .scroll { position: absolute; bottom: 22px; left: 50%; translate: -50% 0; color: var(--dim); font-size: 13px; letter-spacing: 3px; text-decoration: none; animation: bob 2s ease-in-out infinite; }
+  @keyframes bob { 50% { transform: translateY(6px); } }
+
+  /* de inhoud */
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 32px); }
+  .block { padding: clamp(60px, 9vw, 110px) 0 0; }
+  .head { text-align: center; margin-bottom: 36px; }
+  .head p { color: var(--dim); max-width: 640px; margin: 14px auto 0; }
+
+  .features { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .card { background: var(--panel); border: 1px solid var(--line); position: relative; overflow: hidden; transition: transform .25s, border-color .25s, box-shadow .25s; }
+  .card:hover { transform: translateY(-6px); border-color: rgba(255,233,168,.5); box-shadow: 0 18px 40px rgba(0,0,0,.5), 0 0 30px rgba(238,138,50,.18); }
+  .card .shot { aspect-ratio: 96 / 52; background: url("thumbs.png") no-repeat; background-size: 400% 100%; image-rendering: pixelated; border-bottom: 1px solid var(--line); }
+  .card .body { padding: 16px 18px 20px; }
+  .card h3 { font-size: 24px; margin-bottom: 6px; }
+  .card p { margin: 0; color: var(--dim); font-size: 16px; }
+
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; counter-reset: s; }
+  .step { background: var(--panel); border: 1px solid var(--line); padding: 22px 22px 22px 84px; position: relative; min-height: 120px; }
+  .step::before { counter-increment: s; content: counter(s); position: absolute; left: 20px; top: 16px; font-size: 52px; font-weight: 700; line-height: 1;
+        background: linear-gradient(180deg, #fff6d0, var(--orange)); -webkit-background-clip: text; background-clip: text; color: transparent;
+        filter: drop-shadow(2px 0 0 var(--navy)) drop-shadow(-2px 0 0 var(--navy)) drop-shadow(0 2px 0 var(--navy)) drop-shadow(0 -2px 0 var(--navy)); }
+  .step b { color: var(--gold); }
+  .tips { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 18px; }
+  .tip { border-left: 3px solid var(--teal); background: rgba(102,224,240,.06); padding: 12px 16px; font-size: 15px; color: var(--dim); }
+  .tip b { color: var(--text); }
+
+  .news { display: grid; gap: 14px; }
+  .item { display: grid; grid-template-columns: 168px 1fr; gap: 18px; align-items: center; background: var(--panel); border: 1px solid var(--line); padding: 10px; transition: border-color .2s; }
+  .item:hover { border-color: rgba(255,233,168,.45); }
+  .item .shot { aspect-ratio: 96 / 52; background: url("thumbs.png") no-repeat; background-size: 400% 100%; image-rendering: pixelated; }
+  .item .date { color: var(--teal); font-size: 13px; letter-spacing: 2px; }
+  .item h3 { font-size: 22px; margin: 0 0 4px; }
+  .item p { margin: 0; color: var(--dim); font-size: 16px; }
+  .item.first { border-color: rgba(255,233,168,.45); box-shadow: 0 0 30px rgba(238,138,50,.12); }
+  .badge { display: inline-block; font-size: 11px; letter-spacing: 2px; color: #1a0f04; background: var(--gold); padding: 1px 6px; margin-left: 8px; vertical-align: 2px; }
+
+  .final { text-align: center; padding: clamp(70px, 10vw, 120px) 0 30px; }
+  .final .cta { margin-top: 26px; }
+  footer { text-align: center; color: var(--dim); font-size: 14px; padding: 40px 18px 40px; border-top: 1px solid var(--line); margin-top: 60px; }
+  footer a { color: var(--text); }
+
+  .reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (max-width: 900px) {
+    .features { grid-template-columns: 1fr 1fr; }
+    .steps { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    nav .links a:not(.pill) { display: none; }
+    .features, .tips { grid-template-columns: 1fr; }
+    .item { grid-template-columns: 1fr; }
+    .cta { padding: 16px 22px 14px; gap: 14px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before { animation: none !important; transition: none !important; }
+    .reveal { opacity: 1; transform: none; }
   }
 </style>
 </head>
 <body>
-<header class="hero">
-  <img class="scene px" src="bg.png" alt="">
-  <div class="hero-inner">
-    <img class="logo px" src="logo.png" alt="Orbit Horizon">
-    <div class="tag">EXPLORE · SURVIVE · BUILD · DISCOVER</div>
-    <div class="download">
-      <a id="main-dl" class="btn" href="#">
-        <span class="tri"></span>
-        <span><span id="main-label">DOWNLOAD</span><small id="main-sub">the launcher keeps the game up to date</small></span>
-      </a>
-      <div class="others">
-        <a id="dl-win" href="#">Windows</a>
-        <a id="dl-mac-arm" href="#">Mac (Apple Silicon)</a>
-        <a id="dl-mac-intel" href="#">Mac (Intel)</a>
-      </div>
-      <p class="note" id="mac-hint" hidden>Not sure which Mac? Apple menu → About This Mac. "Chip: Apple M…" = Apple Silicon, "Processor: Intel" = Intel.</p>
-    </div>
+<nav id="nav">
+  <img class="mini" src="logo-full.png" alt="Orbit Horizon">
+  <div class="links">
+    <a href="#game">The game</a>
+    <a href="#install">Install</a>
+    <a href="#news">What's new</a>
+    <a class="pill" href="#top" id="nav-dl">Download</a>
   </div>
+</nav>
+
+<header class="hero" id="top">
+  <img class="scene px" src="bg.png" alt="">
+  <canvas id="stars"></canvas>
+  <div class="hero-inner">
+    <img class="logo" src="logo-full.png" alt="Orbit Horizon">
+    <div class="tag">EXPLORE <b>·</b> SURVIVE <b>·</b> BUILD <b>·</b> DISCOVER</div>
+    <a id="main-dl" class="cta" href="#">
+      <span class="tri"></span>
+      <span><span class="big" id="main-label">DOWNLOAD</span><small id="main-sub">the launcher keeps the game up to date</small></span>
+    </a>
+    <div class="others">
+      <a id="dl-win" href="#">Windows</a>
+      <a id="dl-mac-arm" href="#">Mac · Apple Silicon</a>
+      <a id="dl-mac-intel" href="#">Mac · Intel</a>
+    </div>
+    <p class="note" id="mac-hint" hidden>Not sure which Mac? Apple menu → About This Mac. "Chip: Apple M…" means Apple Silicon, "Processor: Intel" means Intel.</p>
+  </div>
+  <a class="scroll" href="#game">▼ SCROLL</a>
 </header>
 
-<main>
-  <section>
-    <h2>HOW TO INSTALL</h2>
-    <ol>
-      <li>Download the launcher for your computer and unzip it.</li>
-      <li>Start <b>Orbit Horizon Launcher</b> and press <span class="os">INSTALL</span>. It downloads the game for you.</li>
-      <li>Press <span class="os">PLAY</span>. Next time the launcher updates the game by itself.</li>
-    </ol>
-    <p class="note"><b>Mac:</b> the first time, right-click the launcher → Open → Open (it isn't signed by Apple yet).<br>
-    <b>Windows:</b> if SmartScreen warns you, click "More info" → "Run anyway".</p>
+<main class="wrap">
+  <section class="block" id="game">
+    <div class="head reveal">
+      <div class="kicker">A pixel survival game in space</div>
+      <h2>Your world fell</h2>
+      <p>Your ship is broken. The stars are still out there. Dig, build a home base, meet survivors and goblins,
+      clear cursed keeps and swamp temples, and fly through an endless galaxy, all the way to strange alien worlds.
+      Alone or with friends, in English and Vietnamese.</p>
+    </div>
+    <div class="features">
+      <div class="card reveal"><div class="shot" style="background-position: 100% 0"></div><div class="body">
+        <h3 class="grad">EXPLORE</h3><p>An endless galaxy of stars, each with its own planets. Some of them are very, very alien.</p></div></div>
+      <div class="card reveal"><div class="shot" style="background-position: 33.333% 0"></div><div class="body">
+        <h3 class="grad ice">SURVIVE</h3><p>Deserts, acid lakes, glowing jellies and goblins with strange plans for you.</p></div></div>
+      <div class="card reveal"><div class="shot" style="background-position: 66.667% 0"></div><div class="body">
+        <h3 class="grad">BUILD</h3><p>A home base with residents, drills, conveyor belts and smelters that run by themselves.</p></div></div>
+      <div class="card reveal"><div class="shot" style="background-position: 0 0"></div><div class="body">
+        <h3 class="grad ice">DISCOVER</h3><p>Repair your ship, upgrade it, and find out what is waiting past the next star.</p></div></div>
+    </div>
   </section>
-  <section>
-    <h2>THE GAME</h2>
-    <p style="margin:0">A pixel survival game in space. Dig, build a home base, tame puffles, meet survivors and goblins,
-    clear cursed keeps and swamp temples, and fly your ship through an endless galaxy, all the way to strange alien worlds.
-    Play alone or with friends. In English and Vietnamese.</p>
+
+  <section class="block" id="install">
+    <div class="head reveal">
+      <div class="kicker">Three steps</div>
+      <h2>How to install</h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal">Download the launcher for your computer and unzip it.</div>
+      <div class="step reveal">Start <b>Orbit Horizon Launcher</b> and press <b>INSTALL</b>. It downloads the game for you.</div>
+      <div class="step reveal">Press <b>PLAY</b>. From then on the launcher keeps the game up to date by itself.</div>
+    </div>
+    <div class="tips reveal">
+      <div class="tip"><b>Mac:</b> the first time, right-click the launcher → Open → Open (it isn't signed by Apple yet).</div>
+      <div class="tip"><b>Windows:</b> if SmartScreen warns you, click "More info" → "Run anyway".</div>
+    </div>
   </section>
-  <section class="wide">
-    <h2>WHAT'S NEW</h2>
-    <div class="news" id="news"><p class="note">Loading…</p></div>
+
+  <section class="block" id="news">
+    <div class="head reveal">
+      <div class="kicker">Patch notes</div>
+      <h2>What's new</h2>
+    </div>
+    <div class="news" id="news-list"><p class="note">Loading…</p></div>
+  </section>
+
+  <section class="final reveal">
+    <h2 class="grad">Ready for lift-off?</h2>
+    <a class="cta" id="final-dl" href="#"><span class="tri"></span><span><span class="big" id="final-label">DOWNLOAD</span><small>free · Windows &amp; Mac</small></span></a>
   </section>
 </main>
+
 <footer>
-  Feedback? Use FEEDBACK in the pause menu, or mail <a href="mailto:gerritkreeft1234@gmail.com?subject=Orbit%20Horizon%20feedback">gerritkreeft1234@gmail.com</a>.
+  Feedback? Use FEEDBACK in the pause menu, or mail <a href="mailto:gerritkreeft1234@gmail.com?subject=Orbit%20Horizon%20feedback">gerritkreeft1234@gmail.com</a>
   · <a href="https://github.com/GerritKreeft23121997/orbit-horizon-releases/releases">All releases</a>
 </footer>
 
@@ -110,23 +227,63 @@
   const REPO = "GerritKreeft23121997/orbit-horizon-releases";
   const DL = name => `https://github.com/${REPO}/releases/latest/download/${name}`;
   const FILES = { win: "OrbitHorizon-Launcher-Windows.zip", arm: "OrbitHorizon-Launcher-Mac-AppleSilicon.zip", intel: "OrbitHorizon-Launcher-Mac-Intel.zip" };
-  document.getElementById("dl-win").href = DL(FILES.win);
-  document.getElementById("dl-mac-arm").href = DL(FILES.arm);
-  document.getElementById("dl-mac-intel").href = DL(FILES.intel);
+  const $ = id => document.getElementById(id);
+  $("dl-win").href = DL(FILES.win); $("dl-mac-arm").href = DL(FILES.arm); $("dl-mac-intel").href = DL(FILES.intel);
 
   // het systeem herkennen (op een Mac kunnen we Apple Silicon en Intel niet altijd onderscheiden: dan Apple Silicon, met een tip)
   const ua = navigator.userAgent, plat = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || "";
   const isMac = /Mac/i.test(plat) || /Macintosh/.test(ua), isWin = /Win/i.test(plat) || /Windows/.test(ua);
-  const main = document.getElementById("main-dl"), label = document.getElementById("main-label"), sub = document.getElementById("main-sub");
-  if (isMac) { main.href = DL(FILES.arm); label.textContent = "DOWNLOAD FOR MAC"; sub.textContent = "Apple Silicon (M1 and newer) · Intel below"; document.getElementById("mac-hint").hidden = false; }
-  else if (isWin) { main.href = DL(FILES.win); label.textContent = "DOWNLOAD FOR WINDOWS"; sub.textContent = "Windows 10 / 11, 64-bit"; }
-  else { main.href = DL(FILES.win); label.textContent = "DOWNLOAD"; sub.textContent = "for Windows · Mac versions below"; }
+  let best = DL(FILES.win), label = "DOWNLOAD", sub = "for Windows · Mac versions below";
+  if (isMac) { best = DL(FILES.arm); label = "DOWNLOAD FOR MAC"; sub = "Apple Silicon (M1 and newer) · Intel below"; $("mac-hint").hidden = false; }
+  else if (isWin) { label = "DOWNLOAD FOR WINDOWS"; sub = "Windows 10 / 11, 64-bit"; }
+  $("main-dl").href = $("final-dl").href = $("nav-dl").href = best;
+  $("main-label").textContent = $("final-label").textContent = label; $("main-sub").textContent = sub;
+
+  // de balk wordt donker zodra je scrolt
+  const nav = $("nav"), onScroll = () => nav.classList.toggle("solid", scrollY > 60);
+  addEventListener("scroll", onScroll, { passive: true }); onScroll();
+
+  // dingen schuiven zachtjes in beeld
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: .12 });
+  const watch = el => io.observe(el);
+  document.querySelectorAll(".reveal").forEach((el, i) => { el.style.transitionDelay = (el.parentElement.classList.contains("features") || el.parentElement.classList.contains("steps") ? (i % 4) * 90 : 0) + "ms"; watch(el); });
+
+  // twinkelende sterren en af en toe een vallende ster, over de achtergrond heen
+  (function stars() {
+    const cv = $("stars"), cx = cv.getContext("2d"), still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let W, H, S = [], shoot = null;
+    const cols = ["#ffffff", "#ffe9a8", "#a8c4ff", "#66e0f0", "#ffb070"];
+    function size() {
+      W = cv.width = Math.ceil(innerWidth / 3); H = cv.height = Math.ceil(cv.offsetHeight / 3) || 300;
+      S = Array.from({ length: Math.round(W * H / 380) }, () => ({ x: Math.random() * W | 0, y: Math.random() * H * .75 | 0, c: cols[Math.random() * cols.length | 0], p: Math.random() * 6.28, s: .5 + Math.random() * 2, big: Math.random() < .08 }));
+    }
+    function frame(t) {
+      cx.clearRect(0, 0, W, H);
+      for (const s of S) {
+        const a = still ? .7 : .25 + .75 * Math.max(0, Math.sin(t / 1000 * s.s + s.p));
+        cx.globalAlpha = a; cx.fillStyle = s.c; cx.fillRect(s.x, s.y, 1, 1);
+        if (s.big && a > .8) { cx.globalAlpha = (a - .8) * 4; cx.fillRect(s.x - 1, s.y, 3, 1); cx.fillRect(s.x, s.y - 1, 1, 3); }
+      }
+      if (!still) {
+        if (!shoot && Math.random() < .004) shoot = { x: Math.random() * W, y: Math.random() * H * .3, v: 1.6 + Math.random(), l: 0 };
+        if (shoot) {
+          shoot.l++; const n = 14;
+          for (let i = 0; i < n; i++) { cx.globalAlpha = (1 - i / n) * .9; cx.fillStyle = i < 2 ? "#fff" : "#ffe9a8"; cx.fillRect((shoot.x - i * shoot.v) | 0, (shoot.y - i * shoot.v * .45) | 0, 1, 1); }
+          shoot.x += shoot.v * 1.6; shoot.y += shoot.v * .72;
+          if (shoot.l > 70) shoot = null;
+        }
+      }
+      cx.globalAlpha = 1;
+      if (!still) requestAnimationFrame(frame);
+    }
+    size(); addEventListener("resize", size); requestAnimationFrame(frame);
+  })();
 
   // wat is er nieuw: de laatste releases (titel = de naam van de release, of de eerste zin)
   const thumbFor = (t, i) => /ALIEN|GALAXY/.test(t) ? 3 : /LAUNCHER|SHIP/.test(t) ? 0 : /DESERT|PLANET/.test(t) ? 1 : (i % 2 ? 1 : 2);
   const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   fetch(`https://api.github.com/repos/${REPO}/releases?per_page=5`).then(r => r.json()).then(list => {
-    const box = document.getElementById("news"); box.innerHTML = "";
+    const box = $("news-list"); box.innerHTML = "";
     list.forEach((r, i) => {
       let title = r.name || "", text = (r.body || "").trim();
       if (!title || title.startsWith("Orbit Horizon")) {
@@ -134,13 +291,14 @@
         if (cut > 0 && cut < 40) { title = text.slice(0, cut); text = text.slice(cut + 1).trim(); } else title = "UPDATE";
       }
       const t = (title + " " + text).toUpperCase(), k = thumbFor(t, i);
-      const el = document.createElement("div"); el.className = "item";
-      el.innerHTML = `<div class="thumb" style="background-position:-${k * 112}px 0"></div>
-        <div><div class="date">${esc(r.tag_name)}</div><h3>${esc(title.toUpperCase())}</h3><p>${esc(text.charAt(0) + text.slice(1).toLowerCase())}</p></div>`;
-      box.appendChild(el);
+      const el = document.createElement("div"); el.className = "item reveal" + (i === 0 ? " first" : "");
+      el.innerHTML = `<div class="shot" style="background-position:${k * 33.333}% 0"></div>
+        <div><div class="date">${esc(r.tag_name)}${i === 0 ? '<span class="badge">LATEST</span>' : ""}</div>
+        <h3 class="grad">${esc(title.toUpperCase())}</h3><p>${esc(text.charAt(0) + text.slice(1).toLowerCase())}</p></div>`;
+      box.appendChild(el); watch(el);
     });
     if (!list.length) box.innerHTML = '<p class="note">No releases yet.</p>';
-  }).catch(() => { document.getElementById("news").innerHTML = `<p class="note">See <a href="https://github.com/${REPO}/releases">all releases</a>.</p>`; });
+  }).catch(() => { $("news-list").innerHTML = `<p class="note">See <a href="https://github.com/${REPO}/releases">all releases</a>.</p>`; });
 </script>
 </body>
 </html>
