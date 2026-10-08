@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Orbit Horizon</title>
+<meta name="description" content="Orbit Horizon: explore, survive, build and discover across an endless pixel galaxy. Download the launcher for Windows or Mac.">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Silkscreen&family=VT323&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c0d1c; --panel: #121426; --panel-hi: #343858; --edge: #0a0a14;
+    --text: #dcdeec; --dim: #8286a0; --gold: #f6dc8c; --teal: #60dcec; --red: #ec6e64;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--text); }
+  body { font-family: "VT323", ui-monospace, monospace; font-size: 22px; line-height: 1.25; }
+  img.px { image-rendering: pixelated; image-rendering: crisp-edges; }
+  a { color: var(--teal); }
+  h1, h2, h3, .btn, .tag { font-family: "Silkscreen", "VT323", monospace; font-weight: normal; letter-spacing: 1px; }
+
+  .hero { position: relative; min-height: min(56.25vw, 720px); overflow: hidden; border-bottom: 2px solid var(--panel-hi); }
+  .hero > .scene { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: right bottom; }
+  .hero-inner { position: relative; max-width: 1100px; margin: 0 auto; padding: 28px 20px 40px; }
+  .logo { width: min(520px, 90%); display: block; }
+  .tag { color: var(--dim); font-size: 15px; margin: 4px 0 26px 6px; }
+
+  .download { background: rgba(18, 20, 38, .92); border: 2px solid var(--panel-hi); padding: 18px; max-width: 470px; }
+  .btn { display: flex; align-items: center; gap: 14px; text-decoration: none; color: var(--gold); background: var(--panel);
+         border: 3px solid var(--gold); padding: 14px 18px; font-size: 24px; position: relative; }
+  .btn:hover { background: #1e2240; }
+  .btn .tri { width: 0; height: 0; border-left: 18px solid var(--gold); border-top: 12px solid transparent; border-bottom: 12px solid transparent; }
+  .btn small { display: block; font-family: "VT323", monospace; font-size: 18px; color: var(--dim); letter-spacing: 0; }
+  .others { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .others a { font-size: 19px; text-decoration: none; color: var(--text); border: 2px solid var(--panel-hi); padding: 4px 10px; background: var(--panel); }
+  .others a:hover { border-color: var(--text); }
+  .note { color: var(--dim); font-size: 19px; margin: 10px 0 0; }
+
+  main { max-width: 1100px; margin: 0 auto; padding: 30px 20px 50px; display: grid; grid-template-columns: 1fr 1fr; gap: 26px; }
+  section { background: var(--panel); border: 2px solid var(--panel-hi); padding: 16px 18px; }
+  h2 { color: var(--gold); font-size: 20px; margin: 0 0 10px; border-bottom: 2px solid var(--panel-hi); padding-bottom: 8px; }
+  ol { padding-left: 24px; margin: 0; } li { margin: 4px 0; }
+  .os { color: var(--gold); }
+  .news { display: flex; flex-direction: column; gap: 10px; }
+  .item { display: grid; grid-template-columns: 112px 1fr; gap: 12px; background: var(--edge); border: 2px solid var(--panel-hi); padding: 6px; }
+  .thumb { width: 112px; height: 61px; background: url("thumbs.png") no-repeat; background-size: 448px 61px; image-rendering: pixelated; border: 2px solid var(--panel-hi); }
+  .item .date { color: var(--dim); font-size: 17px; }
+  .item h3 { color: var(--gold); font-size: 15px; margin: 2px 0 4px; }
+  .item p { margin: 0; font-size: 19px; }
+  .wide { grid-column: 1 / -1; }
+  footer { text-align: center; color: var(--dim); font-size: 18px; padding: 0 20px 34px; }
+  @media (max-width: 760px) {
+    main { grid-template-columns: 1fr; }
+    .hero-inner { padding-top: 18px; }
+    .btn { font-size: 19px; }
+  }
+</style>
+</head>
+<body>
+<header class="hero">
+  <img class="scene px" src="bg.png" alt="">
+  <div class="hero-inner">
+    <img class="logo px" src="logo.png" alt="Orbit Horizon">
+    <div class="tag">EXPLORE · SURVIVE · BUILD · DISCOVER</div>
+    <div class="download">
+      <a id="main-dl" class="btn" href="#">
+        <span class="tri"></span>
+        <span><span id="main-label">DOWNLOAD</span><small id="main-sub">the launcher keeps the game up to date</small></span>
+      </a>
+      <div class="others">
+        <a id="dl-win" href="#">Windows</a>
+        <a id="dl-mac-arm" href="#">Mac (Apple Silicon)</a>
+        <a id="dl-mac-intel" href="#">Mac (Intel)</a>
+      </div>
+      <p class="note" id="mac-hint" hidden>Not sure which Mac? Apple menu → About This Mac. "Chip: Apple M…" = Apple Silicon, "Processor: Intel" = Intel.</p>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section>
+    <h2>HOW TO INSTALL</h2>
+    <ol>
+      <li>Download the launcher for your computer and unzip it.</li>
+      <li>Start <b>Orbit Horizon Launcher</b> and press <span class="os">INSTALL</span>. It downloads the game for you.</li>
+      <li>Press <span class="os">PLAY</span>. Next time the launcher updates the game by itself.</li>
+    </ol>
+    <p class="note"><b>Mac:</b> the first time, right-click the launcher → Open → Open (it isn't signed by Apple yet).<br>
+    <b>Windows:</b> if SmartScreen warns you, click "More info" → "Run anyway".</p>
+  </section>
+  <section>
+    <h2>THE GAME</h2>
+    <p style="margin:0">A pixel survival game in space. Dig, build a home base, tame puffles, meet survivors and goblins,
+    clear cursed keeps and swamp temples, and fly your ship through an endless galaxy, all the way to strange alien worlds.
+    Play alone or with friends. In English and Vietnamese.</p>
+  </section>
+  <section class="wide">
+    <h2>WHAT'S NEW</h2>
+    <div class="news" id="news"><p class="note">Loading…</p></div>
+  </section>
+</main>
+<footer>
+  Feedback? Use FEEDBACK in the pause menu, or mail <a href="mailto:gerritkreeft1234@gmail.com?subject=Orbit%20Horizon%20feedback">gerritkreeft1234@gmail.com</a>.
+  · <a href="https://github.com/GerritKreeft23121997/orbit-horizon-releases/releases">All releases</a>
+</footer>
+
+<script>
+  const REPO = "GerritKreeft23121997/orbit-horizon-releases";
+  const DL = name => `https://github.com/${REPO}/releases/latest/download/${name}`;
+  const FILES = { win: "OrbitHorizon-Launcher-Windows.zip", arm: "OrbitHorizon-Launcher-Mac-AppleSilicon.zip", intel: "OrbitHorizon-Launcher-Mac-Intel.zip" };
+  document.getElementById("dl-win").href = DL(FILES.win);
+  document.getElementById("dl-mac-arm").href = DL(FILES.arm);
+  document.getElementById("dl-mac-intel").href = DL(FILES.intel);
+
+  // het systeem herkennen (op een Mac kunnen we Apple Silicon en Intel niet altijd onderscheiden: dan Apple Silicon, met een tip)
+  const ua = navigator.userAgent, plat = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || "";
+  const isMac = /Mac/i.test(plat) || /Macintosh/.test(ua), isWin = /Win/i.test(plat) || /Windows/.test(ua);
+  const main = document.getElementById("main-dl"), label = document.getElementById("main-label"), sub = document.getElementById("main-sub");
+  if (isMac) { main.href = DL(FILES.arm); label.textContent = "DOWNLOAD FOR MAC"; sub.textContent = "Apple Silicon (M1 and newer) · Intel below"; document.getElementById("mac-hint").hidden = false; }
+  else if (isWin) { main.href = DL(FILES.win); label.textContent = "DOWNLOAD FOR WINDOWS"; sub.textContent = "Windows 10 / 11, 64-bit"; }
+  else { main.href = DL(FILES.win); label.textContent = "DOWNLOAD"; sub.textContent = "for Windows · Mac versions below"; }
+
+  // wat is er nieuw: de laatste releases (titel = de naam van de release, of de eerste zin)
+  const thumbFor = (t, i) => /ALIEN|GALAXY/.test(t) ? 3 : /LAUNCHER|SHIP/.test(t) ? 0 : /DESERT|PLANET/.test(t) ? 1 : (i % 2 ? 1 : 2);
+  const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  fetch(`https://api.github.com/repos/${REPO}/releases?per_page=5`).then(r => r.json()).then(list => {
+    const box = document.getElementById("news"); box.innerHTML = "";
+    list.forEach((r, i) => {
+      let title = r.name || "", text = (r.body || "").trim();
+      if (!title || title.startsWith("Orbit Horizon")) {
+        const cut = text.search(/[.:!]/);
+        if (cut > 0 && cut < 40) { title = text.slice(0, cut); text = text.slice(cut + 1).trim(); } else title = "UPDATE";
+      }
+      const t = (title + " " + text).toUpperCase(), k = thumbFor(t, i);
+      const el = document.createElement("div"); el.className = "item";
+      el.innerHTML = `<div class="thumb" style="background-position:-${k * 112}px 0"></div>
+        <div><div class="date">${esc(r.tag_name)}</div><h3>${esc(title.toUpperCase())}</h3><p>${esc(text.charAt(0) + text.slice(1).toLowerCase())}</p></div>`;
+      box.appendChild(el);
+    });
+    if (!list.length) box.innerHTML = '<p class="note">No releases yet.</p>';
+  }).catch(() => { document.getElementById("news").innerHTML = `<p class="note">See <a href="https://github.com/${REPO}/releases">all releases</a>.</p>`; });
+</script>
+</body>
+</html>
